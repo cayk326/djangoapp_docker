@@ -1,0 +1,22 @@
+FROM python:3.7.6-alpine3.11
+
+ENV APP_PATH /opt/apps
+COPY . $APP_PATH/
+COPY requirements.base.txt $APP_PATH/
+WORKDIR $APP_PATH
+RUN echo "print APP PATH..."
+RUN echo $APP_PATH
+RUN echo "Building..."
+
+
+RUN apk update \
+	&& apk add libpq postgresql-dev \
+	&& apk add build-base \
+	&& apk add bash \
+	&& apk add bash-completion \
+	&& apk add vim
+
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r $APP_PATH/requirements.base.txt
+
+
